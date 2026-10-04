@@ -1,1 +1,1 @@
-# calculadora-de-faltas
+# Oróscopo de Frequência

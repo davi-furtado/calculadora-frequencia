@@ -1,170 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Frequência</title>
 
-  <title>Oróscopo de Frequência</title>
+    <link rel="stylesheet" href="style.css">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <script src="script.js" defer></script>
+  </head>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: #f1f1f1;
-    }
+  <body>
+    <main class="container">
+      <section class="card">
+        <header>
+          <h1>Calculadora de Frequência</h1>
+          <p>Descubra sua porcentagem de faltas e quanto ainda pode faltar.</p>
+        </header>
 
-    main {
-      width: min(500px, 90%);
-      margin: 40px auto;
-      padding: 24px;
-      background: #1e1e1e;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px #0008;
-    }
+        <form id="formulario">
+          <div class="campo">
+            <label for="faltadas">Aulas faltadas</label>
+            <input type="number" id="faltadas" min="0" step="1" required>
+          </div>
+          
+          <div class="campo">
+            <label for="dadas">Aulas dadas</label>
+            <input type="number" id="dadas" min="1" step="1" placeholder="Opcional">
+          </div>
 
-    h1 {
-      text-align: center;
-      margin-top: 0;
-    }
+          <div class="campo">
+            <label for="totais">Aulas totais</label>
+            <input type="number" id="totais" min="1" step="1" placeholder="Opcional">
+          </div>
 
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 16px;
-      background: #2b2b2b;
-      color: #f1f1f1;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #007bff;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 12px;
-      border: 0;
-      border-radius: 6px;
-      background: #007bff;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #0069d9;
-    }
-
-    #resultado {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      background: #2b2b2b;
-    }
-
-    .erro {
-      color: #ff6b6b;
-    }
-  </style>
-</head>
-
-<body>
-  <main>
-    <h1>Oróscopo de Frequência</h1>
-
-    <label for="faltadas">Aulas faltadas</label>
-    <input type="number" id="faltadas" min="0" step="1">
-
-    <label for="dadas">Aulas dadas</label>
-    <input type="number" id="dadas" min="1" step="1">
-
-    <label for="maxFaltas">Porcentagem máxima de faltas (%)</label>
-    <input
-      type="number"
-      id="maxFaltas"
-      min="0"
-      max="100"
-      step="0.01"
-      value="25"
-    >
-
-    <button onclick="calcular()">Calcular</button>
-
-    <div id="resultado"></div>
-  </main>
-
-  <script>
-    function calcular() {
-      const faltadas = Number(document.getElementById("faltadas").value);
-      const dadas = Number(document.getElementById("dadas").value);
-      const maxFaltas = Number(document.getElementById("maxFaltas").value);
-
-      const resultado = document.getElementById("resultado");
-
-      if (
-        dadas <= 0 ||
-        faltadas < 0 ||
-        maxFaltas < 0 ||
-        maxFaltas > 100
-      ) {
-        resultado.innerHTML =
-          '<span class="erro">Preencha os valores corretamente.</span>';
-        return;
-      }
-
-      if (faltadas > dadas) {
-        resultado.innerHTML =
-          '<span class="erro">As faltas não podem ser maiores que as aulas dadas.</span>';
-        return;
-      }
-
-      const porcentagem = (faltadas / dadas) * 100;
-      const limite = maxFaltas / 100;
-
-      let faltasPossiveis;
-
-      if (limite >= 1) {
-        faltasPossiveis = Infinity;
-      } else {
-        faltasPossiveis = Math.floor(
-          (limite * dadas - faltadas) / (1 - limite)
-        );
-      }
-
-      let mensagem;
-
-      if (porcentagem > maxFaltas) {
-        mensagem =
-          "Com essa porcentagem de faltas você ultrapassou o limite.";
-      } else if (porcentagem === maxFaltas) {
-        mensagem = "Você atingiu o limite de faltas.";
-      } else {
-        mensagem =
-          `Você ainda pode faltar ${faltasPossiveis} aula(s).`;
-      }
-
-      resultado.innerHTML = `
-        <strong>Resultado</strong><br><br>
-        Porcentagem de faltas: ${porcentagem.toFixed(2)}%<br>
-        Limite: ${maxFaltas}%<br><br>
-        ${mensagem}
-      `;
-    }
-  </script>
-</body>
+          <p class="ajuda">Informe pelo menos "Aulas dadas" ou "Aulas totais".</p>
+          <div class="campo">
+            <label for="maxFaltas">Porcentagem máxima de faltas</label>
+            <div class="input-porcentagem">
+              <input type="number" id="maxFaltas" min="0" max="100" step="0.01" value="25" required>
+              <span>%</span>
+            </div>
+          </div>
+          
+          <button type="submit">Calcular</button>
+        </form>
+        
+        <output id="resultado" class="resultado" aria-live="polite"></output>
+      </section>
+    </main>
+  </body>
 </html>

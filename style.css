@@ -1,0 +1,181 @@
+:root {
+  --background: #121212;
+  --surface: #1e1e1e;
+  --input: #2a2a2a;
+  --border: #444;
+  --text: #f1f1f1;
+  --muted: #aaa;
+  --primary: #0d6efd;
+  --primary-hover: #0b5ed7;
+  --success: #63d471;
+  --warning: #ffd166;
+  --error: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--background);
+}
+
+.container {
+  width: 100%;
+  max-width: 520px;
+}
+
+.card {
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px #0008;
+}
+
+header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+}
+
+header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.campo {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  outline: none;
+  background: var(--input);
+  color: var(--text);
+  font: inherit;
+}
+
+input::placeholder {
+  color: #777;
+}
+
+input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px #0d6efd33;
+}
+
+.ajuda {
+  margin-top: -8px;
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.input-porcentagem {
+  position: relative;
+}
+
+.input-porcentagem input {
+  padding-right: 40px;
+}
+
+.input-porcentagem span {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: var(--muted);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--primary);
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+button:hover {
+  background: var(--primary-hover);
+}
+
+button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.resultado {
+  display: block;
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: 8px;
+  background: var(--input);
+}
+
+.resultado:empty {
+  display: none;
+}
+
+.resultado.sucesso {
+  border-left: 4px solid var(--success);
+}
+
+.resultado.aviso {
+  border-left: 4px solid var(--warning);
+}
+
+.resultado.erro {
+  border-left: 4px solid var(--error);
+}
+
+.resultado h2 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+}
+
+.resultado p {
+  margin: 6px 0;
+}
+
+.resultado .erro-texto {
+  color: var(--error);
+}
+
+@media (max-width: 400px) {
+  .card {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}

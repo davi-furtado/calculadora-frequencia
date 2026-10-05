@@ -2,7 +2,7 @@
 
 Calculadora web para analisar a frequência escolar a partir da quantidade de faltas, aulas dadas e/ou aulas totais.
 
-[Acesse a calculadora](https://davi-furtado.github.io/oroscopo-de-frequencia/)
+[Acesse a calculadora](https://davi-furtado.github.io/calculadora-frequencia/)
 
 O sistema permite utilizar diferentes informações disponíveis sem precisar escolher manualmente um "modo".
 

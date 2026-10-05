@@ -57,7 +57,9 @@ Limite: 25%
 
 O sistema calcula a porcentagem atual:
 
-$$8 : 40 \cdot 100 = 20\%$$
+$$
+\frac{8}{40} \cdot 100 = 20\%
+$$
 
 E calcula quantas novas faltas podem ser adicionadas sem ultrapassar o limite considerando as aulas já dadas.
 
@@ -73,11 +75,15 @@ Limite: 25%
 
 O máximo permitido é:
 
-$$80 \cdot 0.25 = 20 \text{faltas}$$
+$$
+80 \cdot 0.25 = 20 \text{faltas}
+$$
 
 Portanto:
 
-$$20 - 8 = 12 \text{faltas restantes}$$
+$$
+20 - 8 = 12 \text{faltas restantes}
+$$
 
 ### Aulas dadas e aulas totais
 
@@ -112,29 +118,39 @@ Aulas restantes: 40
 
 Quando as aulas dadas são conhecidas:
 
-$$\frac{\text{faltas}}{\text{aulas dadas}} \cdot 100$$
+$$
+\frac{\text{faltas}}{\text{aulas dadas}} \cdot 100
+$$
 
 ### Máximo de faltas
 
 Quando as aulas totais são conhecidas:
 
-$$\text{aulas totais} \cdot \text{limite}$$
+$$
+\text{aulas totais} \cdot \text{limite}
+$$
 
 ### Faltas restantes
 
-$$\text{máximo de faltas} - \text{faltas atuais}$$
+$$
+\text{máximo de faltas} - \text{faltas atuais}
+$$
 
 ### Faltas possíveis considerando aulas já dadas
 
 Quando o limite é L:
 
-$$\frac{L \cdot \text{aulas dadas} - \text{faltas}}{1 - L}$$
+$$
+\frac{L \cdot \text{aulas dadas} - \text{faltas}}{1 - L}
+$$
 
 O resultado é arredondado para baixo para garantir que o limite não seja ultrapassado.
 
 Para o limite tradicional de 25%, essa fórmula é equivalente a:
 
-$$\frac{\text{aulas dadas} - 4 \cdot \text{faltas}}{3}$$
+$$
+\frac{\text{aulas dadas} - 4 \cdot \text{faltas}}{3}
+$$
 
 ## Validações
 

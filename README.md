@@ -17,7 +17,8 @@ O sistema permite utilizar diferentes informações disponíveis sem precisar es
 * Resultado adaptado aos dados fornecidos.
 * Validação dos valores informados.
 * Interface responsiva em modo escuro.
-* Não utiliza bibliotecas ou frameworks externos.
+* Interface construída com Bootstrap.
+* Validação do formulário com JavaScript e classes Bootstrap.
 
 ## Como usar
 
@@ -112,6 +113,14 @@ Faltas restantes: 12
 Aulas restantes: 40
 ```
 
+Quando os dois campos são preenchidos, o resultado exibe simultaneamente:
+
+* a porcentagem atual e a margem para novas faltas com base nas aulas dadas;
+* o máximo de faltas, as faltas restantes e as aulas restantes com base nas aulas totais.
+
+Assim, as duas formas de cálculo ficam disponíveis no mesmo resumo, inclusive quando
+a porcentagem atual já ultrapassou o limite.
+
 ## Cálculos
 
 ### Porcentagem atual
@@ -172,7 +181,9 @@ O sistema impede:
 * CSS3
 * JavaScript
 
-Não são utilizadas dependências externas.
+O Bootstrap é baixado como dependência durante o deploy e copiado para os diretórios
+públicos por `npm run prepare-assets`. Dessa forma, o site publicado utiliza os
+arquivos locais e não depende de CDN.
 
 ## Estrutura
 
@@ -180,10 +191,22 @@ Não são utilizadas dependências externas.
 calculadora-frequencia/
 │
 ├── index.html
+├── .github/
+│   └── workflows/
+│       └── deploy-pages.yml
+├── css/
+│   ├── bootstrap.min.css
+│   └── style.css
+├── js/
+│   ├── bootstrap.bundle.min.js
+│   └── script.js
+├── package-lock.json
+├── package.json
+├── scripts/
+│   └── copy-assets.js
 ├── LICENSE
 ├── README.md
-├── script.js
-└── style.css
+└── .gitignore
 ```
 
 ## Como executar
@@ -199,6 +222,17 @@ git clone https://github.com/davi-furtado/calculadora-frequencia.git
 Depois abra index.html no navegador.
 
 Também é possível utilizar o Live Server do VS Code.
+
+## Deploy
+
+O workflow do GitHub Pages instala as dependências com `npm ci` e executa:
+
+```bash
+npm run prepare-assets
+```
+
+Esse comando copia o Bootstrap instalado em `node_modules` para `css/` e `js/`
+antes de criar o artefato publicado.
 
 ## Objetivo
 

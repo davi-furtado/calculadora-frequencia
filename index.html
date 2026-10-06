@@ -5,49 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Frequência</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
 
-    <script src="script.js" defer></script>
+    <script src="js/script.js" defer></script>
   </head>
 
   <body>
-    <main class="container">
-      <section class="card">
-        <header>
-          <h1>Calculadora de Frequência</h1>
-          <p>Descubra sua porcentagem de faltas e quanto ainda pode faltar.</p>
+    <nav class="navbar navbar-expand-lg sticky-top border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">Calculadora de Frequência</a>
+        <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#calculadora">Calculadora</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container py-4 py-md-5">
+      <section id="calculadora" class="card border-0 shadow-lg">
+        <header class="text-center mb-4">
+          <h1 class="h2">Calculadora de Frequência</h1>
+          <p class="text-body-secondary mb-0">Descubra sua porcentagem de faltas e quanto ainda pode faltar.</p>
         </header>
 
-        <form id="formulario">
-          <div class="campo">
-            <label for="faltadas">Aulas faltadas</label>
-            <input type="number" id="faltadas" min="0" step="1" required>
-          </div>
+        <form id="formulario" novalidate>
+          <div class="row g-3">
+            <div class="col-12 col-md-4">
+              <label class="form-label" for="faltadas">Aulas faltadas</label>
+              <input class="form-control" type="number" id="faltadas" min="0" step="1" required>
+              <div class="invalid-feedback">Informe a quantidade de aulas faltadas.</div>
+            </div>
 
-          <div class="campo">
-            <label for="dadas">Aulas dadas</label>
-            <input type="number" id="dadas" min="1" step="1" placeholder="Opcional">
-          </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label" for="dadas">Aulas dadas</label>
+              <input class="form-control" type="number" id="dadas" min="1" step="1" placeholder="Opcional">
+              <div class="invalid-feedback">Informe um valor válido para as aulas dadas.</div>
+            </div>
 
-          <div class="campo">
-            <label for="totais">Aulas totais</label>
-            <input type="number" id="totais" min="1" step="1" placeholder="Opcional">
-          </div>
-
-          <p class="ajuda">Informe pelo menos "Aulas dadas" ou "Aulas totais".</p>
-          <div class="campo">
-            <label for="maxFaltas">Porcentagem máxima de faltas</label>
-            <div class="input-porcentagem">
-              <input type="number" id="maxFaltas" min="0" max="100" step="0.01" value="25" required>
-              <span>%</span>
+            <div class="col-12 col-md-4">
+              <label class="form-label" for="totais">Aulas totais</label>
+              <input class="form-control" type="number" id="totais" min="1" step="1" placeholder="Opcional">
+              <div class="invalid-feedback">Informe um valor válido para as aulas totais.</div>
             </div>
           </div>
 
-          <button type="submit">Calcular</button>
+          <p class="form-text mb-3">Informe pelo menos “Aulas dadas” ou “Aulas totais”.</p>
+
+          <div class="row g-3 align-items-end">
+            <div class="col-12 col-md-8">
+              <label class="form-label" for="maxFaltas">Porcentagem máxima de faltas</label>
+              <div class="input-group">
+                <input class="form-control" type="number" id="maxFaltas" min="0" max="100" step="0.01" value="25" required>
+                <span class="input-group-text">%</span>
+                <div class="invalid-feedback">Informe uma porcentagem entre 0% e 100%.</div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+              <button class="btn btn-primary w-100" type="submit">Calcular</button>
+            </div>
+          </div>
         </form>
 
-        <output id="resultado" class="resultado" aria-live="polite"></output>
+        <output id="resultado" class="resultado mt-4" aria-live="polite"></output>
       </section>
     </main>
+
+    <footer class="container py-4 text-center text-body-secondary">
+      <small>Calculadora de Frequência</small>
+    </footer>
+
+    <script src="src/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

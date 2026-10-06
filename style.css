@@ -157,9 +157,112 @@ button:focus-visible {
   border-left: 4px solid var(--error);
 }
 
+.resultado-cabecalho {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.resultado-etiqueta {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .resultado h2 {
-  margin: 0 0 14px;
+  margin: 0;
   font-size: 1.1rem;
+}
+
+.resultado-status {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: var(--success);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.resultado.aviso .resultado-status {
+  color: var(--warning);
+}
+
+.resultado.erro .resultado-status {
+  color: var(--error);
+}
+
+.resultado-metricas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.metrica {
+  display: flex;
+  min-height: 72px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: rgb(0 0 0 / 12%);
+}
+
+.metrica span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.metrica strong {
+  font-size: 1.2rem;
+}
+
+.metrica-destaque {
+  border-color: currentColor;
+  color: var(--success);
+}
+
+.resultado.aviso .metrica-destaque {
+  color: var(--warning);
+}
+
+.resultado-destaque {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 7px;
+  background: rgb(99 212 113 / 10%);
+}
+
+.resultado-destaque span,
+.resultado-destaque small,
+.resultado-ajuda {
+  color: var(--muted);
+}
+
+.resultado-destaque strong {
+  color: var(--success);
+  font-size: 1.35rem;
+}
+
+.resultado.aviso .resultado-destaque {
+  background: rgb(255 209 102 / 10%);
+}
+
+.resultado.aviso .resultado-destaque strong {
+  color: var(--warning);
 }
 
 .resultado p {
@@ -168,6 +271,11 @@ button:focus-visible {
 
 .resultado .erro-texto {
   color: var(--error);
+  font-weight: 600;
+}
+
+.resultado-ajuda {
+  font-size: 0.92rem;
 }
 
 @media (max-width: 400px) {
@@ -177,5 +285,13 @@ button:focus-visible {
 
   h1 {
     font-size: 1.5rem;
+  }
+
+  .resultado-cabecalho {
+    flex-direction: column;
+  }
+
+  .resultado-status {
+    align-self: flex-start;
   }
 }

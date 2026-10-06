@@ -62,9 +62,31 @@ function validarDados(faltadas, dadas, totais, maxFaltas) {
 function mostrarResultado(tipo, titulo, conteudo) {
   resultado.className = `resultado ${tipo}`
   resultado.innerHTML = `
+    <div class="resultado-cabecalho">
+      <div>
+        <span class="resultado-etiqueta">Resumo da frequência</span>
         <h2>${titulo}</h2>
-        ${conteudo}
-    `
+      </div>
+      <span class="resultado-status">${tipo === 'sucesso' ? 'Dentro do limite' : tipo === 'aviso' ? 'Atenção' : 'Verifique os dados'}</span>
+    </div>
+    ${conteudo}
+  `
+}
+
+function criarMetrica(rotulo, valor, destaque = false) {
+  return `
+    <div class="metrica${destaque ? ' metrica-destaque' : ''}">
+      <span>${rotulo}</span>
+      <strong>${valor}</strong>
+    </div>
+  `
+}
+
+function formatarNumero(valor, casas = 0) {
+  return valor.toLocaleString('pt-BR', {
+    minimumFractionDigits: casas,
+    maximumFractionDigits: casas
+  })
 }
 
 formulario.addEventListener('submit', (event) => {
@@ -78,79 +100,57 @@ formulario.addEventListener('submit', (event) => {
     mostrarResultado(
       'erro',
       'Dados inválidos',
-      `<p class="erro-texto">${erro}</p>`
+      `<p class="erro-texto">${erro}</p>
+       <p class="resultado-ajuda">Revise os campos informados e tente novamente.</p>`
     )
     return
   }
   const limite = maxFaltas / 100
   let conteudo = ''
+  let porcentagemAtual = null
 
   /*
    * MODO 1:
    * Aulas dadas informadas.
    */
   if (Number.isFinite(dadas)) {
-    const porcentagemAtual = calcularPorcentagem(faltadas, dadas)
+    porcentagemAtual = calcularPorcentagem(faltadas, dadas)
     conteudo += `
-              <p>
-                <strong>Porcentagem atual:</strong>
-                ${porcentagemAtual.toFixed(2)}%
-              </p>
-        `
+      <div class="resultado-metricas">
+        ${criarMetrica('Faltas atuais', formatarNumero(faltadas))}
+        ${criarMetrica('Aulas dadas', formatarNumero(dadas))}
+        ${criarMetrica('Frequência de faltas', `${formatarNumero(porcentagemAtual, 2)}%`, true)}
+        ${criarMetrica('Limite permitido', `${formatarNumero(maxFaltas, 2)}%`)}
+      </div>
+    `
     if (porcentagemAtual > maxFaltas) {
       mostrarResultado(
         'erro',
         'Limite ultrapassado',
-        `<p>
-          Você está com
-          <strong>${porcentagemAtual.toFixed(2)}%</strong>
-          de faltas.
-        </p>
-        <p>
-          O limite é de
-          <strong>${maxFaltas}%</strong>.
+        `${conteudo}
+        <p class="resultado-ajuda">
+          Você está com <strong>${formatarNumero(porcentagemAtual, 2)}%</strong>
+          de faltas, acima do limite de <strong>${formatarNumero(maxFaltas, 2)}%</strong>.
         </p>`
       )
       return
     }
     if (porcentagemAtual === maxFaltas) {
       conteudo += `
-                <p>
-                  Você atingiu o limite atual de
-                  <strong>${maxFaltas}%</strong>.
-                </p>
-            `
+        <p class="resultado-ajuda">
+          Você atingiu o limite de <strong>${formatarNumero(maxFaltas, 2)}%</strong>.
+          Não há margem para novas faltas sem ultrapassá-lo.
+        </p>
+      `
     } else {
       const faltasPossiveis = calcularFaltasPossiveis(faltadas, dadas, limite)
-      switch (faltasPossiveis) {
-        case 0:
-          conteudo += `
-                    <p>
-                      Considerando as aulas já dadas,
-                      você não pode mais faltar.
-                    </p>
-                `
-          break
-        case 1:
-          conteudo += `
-                    <p>
-                      Considerando as aulas já dadas,
-                      você só pode faltar
-                      <strong>UMA</strong>
-                      aula.
-                    </p>
-                `
-          break
-        default:
-          conteudo += `
-                    <p>
-                      Considerando as aulas já dadas,
-                      você ainda pode faltar
-                      <strong>${faltasPossiveis}</strong>
-                      aula(s).
-                    </p>
-            `
-      }
+      conteudo += `
+        <div class="resultado-destaque">
+          <span>Margem para novas faltas</span>
+          <strong>${formatarNumero(faltasPossiveis)} ${faltasPossiveis === 1 ? 'aula' : 'aulas'}</strong>
+          <small>considerando as aulas já dadas</small>
+        </div>
+      `
     }
   }
 
@@ -163,26 +163,19 @@ formulario.addEventListener('submit', (event) => {
     const faltasRestantes = calcularFaltasRestantes(faltadas, totais, limite)
     const aulasRestantes = Number.isFinite(dadas) ? totais - dadas : null
     conteudo += `
-            <hr>
-            <p>
-                <strong>Aulas totais:</strong>
-                ${totais}
-            </p>
-            <p>
-                <strong>Máximo de faltas:</strong>
-                ${maximoDeFaltas}
-            </p>
-            <p>
-                <strong>Faltas restantes:</strong>
-                ${faltasRestantes}
-            </p>
-        `
+      <div class="resultado-metricas resultado-metricas-totais">
+        ${criarMetrica('Aulas totais', formatarNumero(totais))}
+        ${criarMetrica('Máximo de faltas', formatarNumero(maximoDeFaltas))}
+        ${criarMetrica('Faltas restantes', formatarNumero(faltasRestantes), true)}
+        ${Number.isFinite(aulasRestantes) ? criarMetrica('Aulas restantes', formatarNumero(aulasRestantes)) : ''}
+      </div>
+    `
     if (Number.isFinite(aulasRestantes)) {
       conteudo += `
-                <p>
-                    <strong>Aulas restantes:</strong>
-                    ${aulasRestantes}
-                </p>
+        <p class="resultado-ajuda">
+          Ainda há <strong>${formatarNumero(aulasRestantes)}</strong>
+          aula(s) previstas para a disciplina.
+        </p>
       `
     }
   }
@@ -190,9 +183,6 @@ formulario.addEventListener('submit', (event) => {
   /*
    * Define o tipo visual do resultado.
    */
-  const porcentagemAtual = Number.isFinite(dadas)
-    ? calcularPorcentagem(faltadas, dadas)
-    : null
   let tipo = 'sucesso'
   if (porcentagemAtual !== null && porcentagemAtual >= maxFaltas) {
     tipo = 'aviso'

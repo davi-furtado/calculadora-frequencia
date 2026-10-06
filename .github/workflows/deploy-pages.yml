@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Download Bootstrap assets
+      - name: Prepare static assets
         run: npm run prepare-assets
 
       - name: Prepare Pages artifact
@@ -44,12 +44,11 @@ jobs:
             --exclude='node_modules' \
             --exclude='_site' \
             ./ _site/
-          mkdir -p _site/assets
-          cp -R src/. _site/assets/
-          sed -i 's#src/#assets/#g' _site/index.html
-          test -f _site/assets/css/bootstrap.min.css
-          test -f _site/assets/js/bootstrap.bundle.min.js
-          find _site/assets -type f -print
+          mkdir -p _site/src
+          cp -R src/. _site/src/
+          test -f _site/src/css/bootstrap.min.css
+          test -f _site/src/js/bootstrap.bundle.min.js
+          find _site/src -type f -print
 
       - name: Remove dependencies from artifact
         run: rm -rf node_modules

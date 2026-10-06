@@ -44,8 +44,10 @@ jobs:
             --exclude='node_modules' \
             --exclude='_site' \
             ./ _site/
-          mkdir -p _site/src
-          cp -R src/. _site/src/
+          rm -rf _site/src
+          cp -R src _site/
+          test -f _site/src/css/bootstrap.min.css
+          test -f _site/src/js/bootstrap.bundle.min.js
           find _site/src -type f -print
 
       - name: Remove dependencies from artifact

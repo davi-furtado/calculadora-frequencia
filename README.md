@@ -76,13 +76,13 @@ Limite: 25%
 O máximo permitido é:
 
 $$
-80 \cdot 0.25 = 20 \text{faltas}
+80 \cdot 0.25 = 20 \text{ faltas}
 $$
 
 Portanto:
 
 $$
-20 - 8 = 12 \text{faltas restantes}
+20 - 8 = 12 \text{ faltas restantes}
 $$
 
 ### Aulas dadas e aulas totais
@@ -177,7 +177,7 @@ Não são utilizadas dependências externas.
 ## Estrutura
 
 ```text
-oroscopo-de-frequencia/
+calculadora-frequencia/
 │
 ├── index.html
 ├── LICENSE
@@ -193,7 +193,7 @@ Não é necessário instalar dependências.
 Clone o repositório:
 
 ```bash
-git clone https://github.com/davi-furtado/oroscopo-de-frequencia.git
+git clone https://github.com/davi-furtado/calculadora-frequencia.git
 ```
 
 Depois abra index.html no navegador.

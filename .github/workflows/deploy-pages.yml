@@ -44,6 +44,8 @@ jobs:
             --exclude='node_modules' \
             --exclude='_site' \
             ./ _site/
+          cp -R src _site/src
+          find _site/src -type f -print
 
       - name: Remove dependencies from artifact
         run: rm -rf node_modules

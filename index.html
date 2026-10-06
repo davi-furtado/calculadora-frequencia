@@ -11,46 +11,46 @@
     <script src="js/script.js" defer></script>
   </head>
 
-  <body>
+  <body class="bg-dark text-light">
     <header class="container pt-4 text-center">
-      <h1>Calculadora de Frequência</h1>
+      <h1 class="display-5">Calculadora de Frequência</h1>
     </header>
 
     <main class="container py-4 py-md-5">
-      <section id="calculadora" class="card border-0 shadow-lg">
+      <section id="calculadora" class="calculadora-card card mx-auto border-secondary shadow-lg bg-dark-subtle">
         <header class="text-center mb-4">
-          <p class="text-body-secondary mb-0">Descubra sua porcentagem de faltas e quanto ainda pode faltar.</p>
+          <p class="text-secondary mb-0">Descubra sua porcentagem de faltas e quanto ainda pode faltar.</p>
         </header>
 
         <form id="formulario" class="needs-validation" novalidate>
           <div class="row g-3">
             <div class="col-12 col-md-4">
-              <label class="form-label" for="faltadas">Aulas faltadas</label>
-              <input class="form-control" type="number" id="faltadas" min="0" step="1" required>
+              <label class="form-label text-light" for="faltadas">Aulas faltadas</label>
+              <input class="form-control bg-dark text-light border-secondary" type="number" id="faltadas" min="0" step="1" required>
               <div class="invalid-feedback">Informe a quantidade de aulas faltadas.</div>
             </div>
 
             <div class="col-12 col-md-4">
-              <label class="form-label" for="dadas">Aulas dadas</label>
-              <input class="form-control" type="number" id="dadas" min="1" step="1" placeholder="Opcional">
+              <label class="form-label text-light" for="dadas">Aulas dadas</label>
+              <input class="form-control bg-dark text-light border-secondary" type="number" id="dadas" min="1" step="1" placeholder="Opcional">
               <div class="invalid-feedback">Informe um valor válido para as aulas dadas.</div>
             </div>
 
             <div class="col-12 col-md-4">
-              <label class="form-label" for="totais">Aulas totais</label>
-              <input class="form-control" type="number" id="totais" min="1" step="1" placeholder="Opcional">
+              <label class="form-label text-light" for="totais">Aulas totais</label>
+              <input class="form-control bg-dark text-light border-secondary" type="number" id="totais" min="1" step="1" placeholder="Opcional">
               <div class="invalid-feedback">Informe um valor válido para as aulas totais.</div>
             </div>
           </div>
 
-          <p class="form-text mb-3">Informe pelo menos “Aulas dadas” ou “Aulas totais”.</p>
+          <p class="form-text text-secondary mb-3">Informe pelo menos “Aulas dadas” ou “Aulas totais”.</p>
 
           <div class="row g-3 align-items-end">
             <div class="col-12 col-md-8">
-              <label class="form-label" for="maxFaltas">Porcentagem máxima de faltas</label>
+              <label class="form-label text-light" for="maxFaltas">Porcentagem máxima de faltas</label>
               <div class="input-group">
-                <input class="form-control" type="number" id="maxFaltas" min="0" max="100" step="0.01" value="25" required>
-                <span class="input-group-text">%</span>
+                <input class="form-control bg-dark text-light border-secondary" type="number" id="maxFaltas" min="0" max="100" step="0.01" value="25" required>
+                <span class="input-group-text bg-secondary text-light border-secondary">%</span>
                 <div class="invalid-feedback">Informe uma porcentagem entre 0% e 100%.</div>
               </div>
             </div>
@@ -65,7 +65,7 @@
       </section>
     </main>
 
-    <footer class="container py-4 text-center text-body-secondary">
+    <footer class="container py-4 text-center text-secondary">
       <small>Calculadora de Frequência</small>
     </footer>
 

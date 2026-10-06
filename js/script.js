@@ -109,14 +109,19 @@ function aplicarValidacao(erros) {
 }
 
 function mostrarResultado(tipo, titulo, conteudo) {
-  resultado.className = `resultado ${tipo} mt-4`
+  const estilos = {
+    sucesso: 'border-success',
+    aviso: 'border-warning',
+    erro: 'border-danger'
+  }
+  resultado.className = `resultado mt-4 p-3 border-start border-4 rounded bg-dark ${estilos[tipo]}`
   resultado.innerHTML = `
-    <div class="resultado-cabecalho">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
       <div>
-        <span class="resultado-etiqueta">Resumo da frequência</span>
-        <h2>${titulo}</h2>
+        <span class="d-block small text-secondary text-uppercase fw-bold">Resumo da frequência</span>
+        <h2 class="h5 mb-0">${titulo}</h2>
       </div>
-      <span class="resultado-status">${tipo === 'sucesso' ? 'Dentro do limite' : tipo === 'aviso' ? 'Atenção' : 'Verifique os dados'}</span>
+      <span class="badge text-bg-${tipo === 'sucesso' ? 'success' : tipo === 'aviso' ? 'warning' : 'danger'}">${tipo === 'sucesso' ? 'Dentro do limite' : tipo === 'aviso' ? 'Atenção' : 'Verifique os dados'}</span>
     </div>
     ${conteudo}
   `
@@ -125,9 +130,9 @@ function mostrarResultado(tipo, titulo, conteudo) {
 function criarMetrica(rotulo, valor, destaque = false) {
   return `
     <div class="col-12 col-sm-6">
-      <div class="metrica h-100${destaque ? ' metrica-destaque' : ''}">
-        <span>${rotulo}</span>
-        <strong>${valor}</strong>
+      <div class="h-100 d-flex flex-column justify-content-between gap-2 p-3 border rounded bg-black bg-opacity-25${destaque ? ' border-primary' : ' border-secondary'}">
+        <span class="small text-secondary">${rotulo}</span>
+        <strong class="${destaque ? 'text-primary' : 'text-light'} fs-5">${valor}</strong>
       </div>
     </div>
   `
@@ -164,8 +169,8 @@ formulario.addEventListener('submit', (event) => {
     mostrarResultado(
       'erro',
       'Dados inválidos',
-      `<p class="erro-texto">${erro.mensagem}</p>
-       <p class="resultado-ajuda">Revise os campos informados e tente novamente.</p>`
+      `<p class="text-danger fw-semibold">${erro.mensagem}</p>
+       <p class="text-secondary mb-0">Revise os campos informados e tente novamente.</p>`
     )
     return
   }
@@ -182,9 +187,9 @@ formulario.addEventListener('submit', (event) => {
     porcentagemAtual = calcularPorcentagem(faltadas, dadas)
     limiteUltrapassado = porcentagemAtual > maxFaltas
     conteudo += `
-      <section class="resultado-secao">
-        <h3>Considerando as aulas dadas</h3>
-        <div class="resultado-metricas row g-3">
+      <section>
+        <h3 class="h6 mb-3">Considerando as aulas dadas</h3>
+        <div class="row g-3">
           ${criarMetrica('Faltas atuais', formatarNumero(faltadas))}
           ${criarMetrica('Aulas dadas', formatarNumero(dadas))}
           ${criarMetrica('Frequência de faltas', `${formatarNumero(porcentagemAtual, 2)}%`, true)}
@@ -193,13 +198,13 @@ formulario.addEventListener('submit', (event) => {
     `
     if (limiteUltrapassado) {
       conteudo += `
-        <p class="resultado-ajuda">
+        <p class="text-secondary">
           A porcentagem atual está acima do limite. Não há margem para novas faltas.
         </p>
       `
     } else if (porcentagemAtual === maxFaltas) {
       conteudo += `
-        <p class="resultado-ajuda">
+        <p class="text-secondary">
           Você atingiu o limite de <strong>${formatarNumero(maxFaltas, 2)}%</strong>.
           Não há margem para novas faltas sem ultrapassá-lo.
         </p>
@@ -207,9 +212,9 @@ formulario.addEventListener('submit', (event) => {
     } else {
       const faltasPossiveis = calcularFaltasPossiveis(faltadas, dadas, limite)
       conteudo += `
-        <div class="resultado-destaque">
-          <span>Margem para novas faltas</span>
-          <strong>${formatarQuantidade(faltasPossiveis, 'aula')}</strong>
+        <div class="alert alert-success mt-3 mb-0">
+          <span class="d-block">Margem para novas faltas</span>
+          <strong class="d-block fs-5">${formatarQuantidade(faltasPossiveis, 'aula')}</strong>
           <small>considerando as aulas já dadas</small>
         </div>
       `
@@ -226,9 +231,9 @@ formulario.addEventListener('submit', (event) => {
     const faltasRestantes = calcularFaltasRestantes(faltadas, totais, limite)
     const aulasRestantes = Number.isFinite(dadas) ? totais - dadas : null
     conteudo += `
-      <section class="resultado-secao">
-        <h3>Considerando as aulas totais</h3>
-        <div class="resultado-metricas resultado-metricas-totais row g-3">
+      <section class="mt-4 pt-4 border-top border-secondary">
+        <h3 class="h6 mb-3">Considerando as aulas totais</h3>
+        <div class="row g-3">
           ${criarMetrica('Aulas totais', formatarNumero(totais))}
           ${criarMetrica('Máximo de faltas', formatarNumero(maximoDeFaltas))}
           ${criarMetrica('Faltas restantes', formatarNumero(faltasRestantes), true)}
@@ -250,7 +255,7 @@ formulario.addEventListener('submit', (event) => {
           mensagemAulasRestantes = `Ainda há ${formatarQuantidade(aulasRestantes, 'aula')} previstas para a disciplina.`
       }
       conteudo += `
-        <p class="resultado-ajuda">
+        <p class="text-secondary mb-0">
           ${mensagemAulasRestantes}
         </p>
       `

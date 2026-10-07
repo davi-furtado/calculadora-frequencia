@@ -129,7 +129,7 @@ function mostrarResultado(tipo, titulo, conteudo) {
 
 function criarMetrica(rotulo, valor, destaque = false) {
   return `
-    <div class="col-12 col-sm-6">
+    <div class="col-6">
       <div class="metrica${destaque ? ' metrica-destaque' : ''}">
         <span class="metrica-rotulo">${rotulo}</span>
         <strong class="metrica-valor">${valor}</strong>

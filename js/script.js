@@ -109,19 +109,19 @@ function aplicarValidacao(erros) {
 }
 
 function mostrarResultado(tipo, titulo, conteudo) {
-  const estilos = {
-    sucesso: 'border-success',
-    aviso: 'border-warning',
-    erro: 'border-danger'
+  const selos = {
+    sucesso: 'Dentro do limite',
+    aviso: 'Atenção',
+    erro: 'Verifique os dados'
   }
-  resultado.className = `resultado mt-4 p-3 border-start border-4 rounded bg-dark ${estilos[tipo]}`
+  resultado.className = `resultado resultado-${tipo} mt-4`
   resultado.innerHTML = `
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
       <div>
-        <span class="d-block small text-secondary text-uppercase fw-bold">Resumo da frequência</span>
-        <h2 class="h5 mb-0">${titulo}</h2>
+        <span class="resultado-rotulo">Resumo da frequência</span>
+        <h2 class="h5 mb-0 mt-1">${titulo}</h2>
       </div>
-      <span class="badge text-bg-${tipo === 'sucesso' ? 'success' : tipo === 'aviso' ? 'warning' : 'danger'}">${tipo === 'sucesso' ? 'Dentro do limite' : tipo === 'aviso' ? 'Atenção' : 'Verifique os dados'}</span>
+      <span class="resultado-selo">${selos[tipo]}</span>
     </div>
     ${conteudo}
   `
@@ -130,10 +130,26 @@ function mostrarResultado(tipo, titulo, conteudo) {
 function criarMetrica(rotulo, valor, destaque = false) {
   return `
     <div class="col-12 col-sm-6">
-      <div class="h-100 d-flex flex-column justify-content-between gap-2 p-3 border rounded bg-black bg-opacity-25${destaque ? ' border-primary' : ' border-secondary'}">
-        <span class="small text-secondary">${rotulo}</span>
-        <strong class="${destaque ? 'text-primary' : 'text-light'} fs-5">${valor}</strong>
+      <div class="metrica${destaque ? ' metrica-destaque' : ''}">
+        <span class="metrica-rotulo">${rotulo}</span>
+        <strong class="metrica-valor">${valor}</strong>
       </div>
+    </div>
+  `
+}
+
+function criarBarra(porcentagemDoLimite) {
+  const largura = Math.min(100, Math.max(0, porcentagemDoLimite))
+  return `
+    <div
+      class="barra"
+      role="progressbar"
+      aria-label="Parcela do limite de faltas já utilizada"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="${Math.round(largura)}"
+    >
+      <div class="barra-preenchimento" style="width: ${largura}%"></div>
     </div>
   `
 }
@@ -169,8 +185,8 @@ formulario.addEventListener('submit', (event) => {
     mostrarResultado(
       'erro',
       'Dados inválidos',
-      `<p class="text-danger fw-semibold">${erro.mensagem}</p>
-       <p class="text-secondary mb-0">Revise os campos informados e tente novamente.</p>`
+      `<p class="resultado-erro-msg mb-2">${erro.mensagem}</p>
+       <p class="resultado-texto mt-0 mb-0">Revise os campos informados e tente novamente.</p>`
     )
     return
   }
@@ -186,25 +202,28 @@ formulario.addEventListener('submit', (event) => {
   if (Number.isFinite(dadas)) {
     porcentagemAtual = calcularPorcentagem(faltadas, dadas)
     limiteUltrapassado = porcentagemAtual > maxFaltas
+    const usoDoLimite =
+      maxFaltas > 0 ? (porcentagemAtual / maxFaltas) * 100 : faltadas > 0 ? 100 : 0
     conteudo += `
-      <section>
-        <h3 class="h6 mb-3">Considerando as aulas dadas</h3>
+      <section class="resultado-bloco">
+        <h3 class="secao-titulo">Considerando as aulas dadas</h3>
         <div class="row g-3">
           ${criarMetrica('Faltas atuais', formatarNumero(faltadas))}
           ${criarMetrica('Aulas dadas', formatarNumero(dadas))}
           ${criarMetrica('Frequência de faltas', `${formatarNumero(porcentagemAtual, 2)}%`, true)}
           ${criarMetrica('Limite permitido', `${formatarNumero(maxFaltas, 2)}%`)}
         </div>
+        ${criarBarra(usoDoLimite)}
     `
     if (limiteUltrapassado) {
       conteudo += `
-        <p class="text-secondary">
+        <p class="resultado-texto">
           A porcentagem atual está acima do limite. Não há margem para novas faltas.
         </p>
       `
     } else if (porcentagemAtual === maxFaltas) {
       conteudo += `
-        <p class="text-secondary">
+        <p class="resultado-texto">
           Você atingiu o limite de <strong>${formatarNumero(maxFaltas, 2)}%</strong>.
           Não há margem para novas faltas sem ultrapassá-lo.
         </p>
@@ -212,9 +231,9 @@ formulario.addEventListener('submit', (event) => {
     } else {
       const faltasPossiveis = calcularFaltasPossiveis(faltadas, dadas, limite)
       conteudo += `
-        <div class="alert alert-success mt-3 mb-0">
-          <span class="d-block">Margem para novas faltas</span>
-          <strong class="d-block fs-5">${formatarQuantidade(faltasPossiveis, 'aula')}</strong>
+        <div class="margem">
+          <span class="margem-rotulo">Margem para novas faltas</span>
+          <strong class="margem-valor">${formatarQuantidade(faltasPossiveis, 'aula')}</strong>
           <small>considerando as aulas já dadas</small>
         </div>
       `
@@ -231,8 +250,8 @@ formulario.addEventListener('submit', (event) => {
     const faltasRestantes = calcularFaltasRestantes(faltadas, totais, limite)
     const aulasRestantes = Number.isFinite(dadas) ? totais - dadas : null
     conteudo += `
-      <section class="mt-4 pt-4 border-top border-secondary">
-        <h3 class="h6 mb-3">Considerando as aulas totais</h3>
+      <section class="resultado-bloco">
+        <h3 class="secao-titulo">Considerando as aulas totais</h3>
         <div class="row g-3">
           ${criarMetrica('Aulas totais', formatarNumero(totais))}
           ${criarMetrica('Máximo de faltas', formatarNumero(maximoDeFaltas))}
@@ -255,7 +274,7 @@ formulario.addEventListener('submit', (event) => {
           mensagemAulasRestantes = `Ainda há ${formatarQuantidade(aulasRestantes, 'aula')} previstas para a disciplina.`
       }
       conteudo += `
-        <p class="text-secondary mb-0">
+        <p class="resultado-texto mb-0">
           ${mensagemAulasRestantes}
         </p>
       `

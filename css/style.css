@@ -211,24 +211,38 @@ main {
 
 .resultado {
   --cf-tone: var(--cf-success);
-  padding: 1.25rem;
-  background: rgba(8, 12, 26, 0.55);
-  border: 1px solid var(--cf-border);
-  border-left: 4px solid var(--cf-tone);
-  border-radius: 0.85rem;
   animation: resultado-entrada 0.35s ease both;
 }
 
-.resultado-sucesso {
+.resultado-sucesso,
+.quadro-sucesso {
   --cf-tone: var(--cf-success);
 }
 
-.resultado-aviso {
+.resultado-aviso,
+.quadro-aviso {
   --cf-tone: var(--cf-warning);
 }
 
-.resultado-erro {
+.resultado-erro,
+.quadro-erro {
   --cf-tone: var(--cf-danger);
+}
+
+/* Quadros: cada tipo de previsão (aulas dadas / aulas totais) tem o seu */
+
+.quadros {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quadro {
+  padding: clamp(1rem, 3vw, 1.5rem);
+  background: rgba(8, 12, 26, 0.55);
+  border: 1px solid var(--cf-border);
+  border-top: 3px solid var(--cf-tone);
+  border-radius: 0.85rem;
 }
 
 .resultado-rotulo {
@@ -262,12 +276,6 @@ main {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--cf-tone) 25%, transparent);
 }
 
-.resultado-bloco + .resultado-bloco {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--cf-border);
-}
-
 .resultado-texto {
   margin: 1rem 0 0;
   color: var(--cf-muted);
@@ -296,12 +304,18 @@ main {
   transition: width 0.5s ease;
 }
 
-.resultado-aviso .barra-preenchimento {
+.barra-aviso .barra-preenchimento {
   background: linear-gradient(90deg, #f59e0b, var(--cf-warning));
 }
 
-.resultado-erro .barra-preenchimento {
+.barra-erro .barra-preenchimento {
   background: linear-gradient(90deg, #ef4444, var(--cf-danger));
+}
+
+.barra-legenda {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--cf-muted);
 }
 
 /* Métricas */

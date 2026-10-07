@@ -123,7 +123,9 @@ function mostrarResultado(tipo, titulo, conteudo) {
       </div>
       <span class="resultado-selo">${selos[tipo]}</span>
     </div>
-    ${conteudo}
+    <div class="quadros">
+      ${conteudo}
+    </div>
   `
 }
 
@@ -138,11 +140,24 @@ function criarMetrica(rotulo, valor, destaque = false) {
   `
 }
 
-function criarBarra(porcentagemDoLimite) {
-  const largura = Math.min(100, Math.max(0, porcentagemDoLimite))
+function calcularUsoDoLimite(usado, maximo) {
+  if (maximo > 0) {
+    return (usado / maximo) * 100
+  }
+  return usado > 0 ? 100 : 0
+}
+
+function definirTom(usado, maximo) {
+  if (usado > maximo) return 'erro'
+  if (usado === maximo) return 'aviso'
+  return 'sucesso'
+}
+
+function criarBarra(usoDoLimite, tom, legenda) {
+  const largura = Math.min(100, Math.max(0, usoDoLimite))
   return `
     <div
-      class="barra"
+      class="barra barra-${tom}"
       role="progressbar"
       aria-label="Parcela do limite de faltas já utilizada"
       aria-valuemin="0"
@@ -151,6 +166,7 @@ function criarBarra(porcentagemDoLimite) {
     >
       <div class="barra-preenchimento" style="width: ${largura}%"></div>
     </div>
+    <p class="barra-legenda">${legenda}</p>
   `
 }
 
@@ -185,8 +201,10 @@ formulario.addEventListener('submit', (event) => {
     mostrarResultado(
       'erro',
       'Dados inválidos',
-      `<p class="resultado-erro-msg mb-2">${erro.mensagem}</p>
-       <p class="resultado-texto mt-0 mb-0">Revise os campos informados e tente novamente.</p>`
+      `<section class="quadro quadro-erro">
+         <p class="resultado-erro-msg mb-2">${erro.mensagem}</p>
+         <p class="resultado-texto mt-0 mb-0">Revise os campos informados e tente novamente.</p>
+       </section>`
     )
     return
   }
@@ -202,10 +220,10 @@ formulario.addEventListener('submit', (event) => {
   if (Number.isFinite(dadas)) {
     porcentagemAtual = calcularPorcentagem(faltadas, dadas)
     limiteUltrapassado = porcentagemAtual > maxFaltas
-    const usoDoLimite =
-      maxFaltas > 0 ? (porcentagemAtual / maxFaltas) * 100 : faltadas > 0 ? 100 : 0
+    const usoDoLimite = calcularUsoDoLimite(porcentagemAtual, maxFaltas)
+    const tomDadas = definirTom(porcentagemAtual, maxFaltas)
     conteudo += `
-      <section class="resultado-bloco">
+      <section class="quadro quadro-${tomDadas}">
         <h3 class="secao-titulo">Considerando as aulas dadas</h3>
         <div class="row g-3">
           ${criarMetrica('Faltas atuais', formatarNumero(faltadas))}
@@ -213,7 +231,7 @@ formulario.addEventListener('submit', (event) => {
           ${criarMetrica('Frequência de faltas', `${formatarNumero(porcentagemAtual, 2)}%`, true)}
           ${criarMetrica('Limite permitido', `${formatarNumero(maxFaltas, 2)}%`)}
         </div>
-        ${criarBarra(usoDoLimite)}
+        ${criarBarra(usoDoLimite, tomDadas, `${formatarNumero(usoDoLimite, 0)}% do limite de faltas utilizado`)}
     `
     if (limiteUltrapassado) {
       conteudo += `
@@ -249,8 +267,10 @@ formulario.addEventListener('submit', (event) => {
     const maximoDeFaltas = calcularMaximoDeFaltas(totais, limite)
     const faltasRestantes = calcularFaltasRestantes(faltadas, totais, limite)
     const aulasRestantes = Number.isFinite(dadas) ? totais - dadas : null
+    const usoDasFaltas = calcularUsoDoLimite(faltadas, maximoDeFaltas)
+    const tomTotais = definirTom(faltadas, maximoDeFaltas)
     conteudo += `
-      <section class="resultado-bloco">
+      <section class="quadro quadro-${tomTotais}">
         <h3 class="secao-titulo">Considerando as aulas totais</h3>
         <div class="row g-3">
           ${criarMetrica('Aulas totais', formatarNumero(totais))}
@@ -258,6 +278,7 @@ formulario.addEventListener('submit', (event) => {
           ${criarMetrica('Faltas restantes', formatarNumero(faltasRestantes), true)}
           ${Number.isFinite(aulasRestantes) ? criarMetrica('Aulas restantes', formatarNumero(aulasRestantes)) : ''}
         </div>
+        ${criarBarra(usoDasFaltas, tomTotais, `${formatarNumero(faltadas)} de ${formatarNumero(maximoDeFaltas)} faltas permitidas utilizadas`)}
     `
     if (Number.isFinite(aulasRestantes)) {
       let mensagemAulasRestantes

@@ -123,7 +123,7 @@ function mostrarResultado(tipo, titulo, conteudo) {
       </div>
       <span class="resultado-selo">${selos[tipo]}</span>
     </div>
-    <div class="quadros">
+    <div class="quadros row g-3">
       ${conteudo}
     </div>
   `
@@ -170,7 +170,7 @@ function criarBarra(usoDoLimite, tom, legenda) {
   `
 }
 
-function formatarNumero(valor, casas = 0) {
+function formatarNumero(valor, casas = 1) {
   return valor.toLocaleString('pt-BR', {
     minimumFractionDigits: casas,
     maximumFractionDigits: casas
@@ -184,7 +184,7 @@ function formatarQuantidade(quantidade, singular, plural = `${singular}s`) {
     case 1:
       return `uma ${singular}`
     default:
-      return `${formatarNumero(quantidade)} ${plural}`
+      return `${formatarNumero(quantidade, 0)} ${plural}`
   }
 }
 
@@ -201,7 +201,7 @@ formulario.addEventListener('submit', (event) => {
     mostrarResultado(
       'erro',
       'Dados inválidos',
-      `<section class="quadro quadro-erro">
+      `<section class="quadro quadro-erro col-md-12">
          <p class="resultado-erro-msg mb-2">${erro.mensagem}</p>
          <p class="resultado-texto mt-0 mb-0">Revise os campos informados e tente novamente.</p>
        </section>`
@@ -223,13 +223,13 @@ formulario.addEventListener('submit', (event) => {
     const usoDoLimite = calcularUsoDoLimite(porcentagemAtual, maxFaltas)
     const tomDadas = definirTom(porcentagemAtual, maxFaltas)
     conteudo += `
-      <section class="quadro quadro-${tomDadas}">
+      <section class="quadro quadro-${tomDadas} col-md-6">
         <h3 class="secao-titulo">Considerando as aulas dadas</h3>
         <div class="row g-3">
-          ${criarMetrica('Faltas atuais', formatarNumero(faltadas))}
-          ${criarMetrica('Aulas dadas', formatarNumero(dadas))}
-          ${criarMetrica('Frequência de faltas', `${formatarNumero(porcentagemAtual, 2)}%`, true)}
-          ${criarMetrica('Limite permitido', `${formatarNumero(maxFaltas, 2)}%`)}
+          ${criarMetrica('Faltas atuais', formatarNumero(faltadas, 0))}
+          ${criarMetrica('Aulas dadas', formatarNumero(dadas, 0))}
+          ${criarMetrica('Frequência de faltas', `${formatarNumero(porcentagemAtual)}%`, true)}
+          ${criarMetrica('Limite permitido', `${formatarNumero(maxFaltas)}%`)}
         </div>
         ${criarBarra(usoDoLimite, tomDadas, `${formatarNumero(usoDoLimite, 0)}% do limite de faltas utilizado`)}
     `
@@ -242,7 +242,7 @@ formulario.addEventListener('submit', (event) => {
     } else if (porcentagemAtual === maxFaltas) {
       conteudo += `
         <p class="resultado-texto">
-          Você atingiu o limite de <strong>${formatarNumero(maxFaltas, 2)}%</strong>.
+          Você atingiu o limite de <strong>${formatarNumero(maxFaltas)}%</strong>.
           Não há margem para novas faltas sem ultrapassá-lo.
         </p>
       `
@@ -270,15 +270,15 @@ formulario.addEventListener('submit', (event) => {
     const usoDasFaltas = calcularUsoDoLimite(faltadas, maximoDeFaltas)
     const tomTotais = definirTom(faltadas, maximoDeFaltas)
     conteudo += `
-      <section class="quadro quadro-${tomTotais}">
+      <section class="quadro quadro-${tomTotais} col-md-6">
         <h3 class="secao-titulo">Considerando as aulas totais</h3>
         <div class="row g-3">
-          ${criarMetrica('Aulas totais', formatarNumero(totais))}
-          ${criarMetrica('Máximo de faltas', formatarNumero(maximoDeFaltas))}
-          ${criarMetrica('Faltas restantes', formatarNumero(faltasRestantes), true)}
-          ${Number.isFinite(aulasRestantes) ? criarMetrica('Aulas restantes', formatarNumero(aulasRestantes)) : ''}
+          ${criarMetrica('Aulas totais', formatarNumero(totais, 0))}
+          ${criarMetrica('Máximo de faltas', formatarNumero(maximoDeFaltas, 0))}
+          ${criarMetrica('Faltas restantes', formatarNumero(faltasRestantes, 0), true)}
+          ${Number.isFinite(aulasRestantes) ? criarMetrica('Aulas restantes', formatarNumero(aulasRestantes, 0)) : ''}
         </div>
-        ${criarBarra(usoDasFaltas, tomTotais, `${formatarNumero(faltadas)} de ${formatarNumero(maximoDeFaltas)} faltas permitidas utilizadas`)}
+        ${criarBarra(usoDasFaltas, tomTotais, `${formatarNumero(faltadas, 0)} de ${formatarNumero(maximoDeFaltas, 0)} faltas permitidas utilizadas`)}
     `
     if (Number.isFinite(aulasRestantes)) {
       let mensagemAulasRestantes
